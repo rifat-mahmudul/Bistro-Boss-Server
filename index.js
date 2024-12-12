@@ -7,7 +7,7 @@ const app = express();
 
 //middleware
 app.use(cors());
-app.use(express());
+app.use(express.json());
 
 
 const user = process.env.DB_USER;
@@ -30,6 +30,7 @@ async function run() {
 
         const menuCollection = client.db('BistroBossDB').collection('menu');
         const reviewsCollection = client.db('BistroBossDB').collection('reviews');
+        const cartsCollection = client.db('BistroBossDB').collection('carts');
 
         //get all menu Data from DB
         app.get('/menu', async (req, res) => {
@@ -40,6 +41,13 @@ async function run() {
         //get all reviews Data form DB
         app.get('/reviews', async (req, res) =>{
             const result = await reviewsCollection.find().toArray();
+            res.send(result);
+        })
+
+        //post cart Data on DB
+        app.post('/carts', async (req, res) => {
+            const cartItem = req.body;
+            const result = await cartsCollection.insertOne(cartItem);
             res.send(result);
         })
 
