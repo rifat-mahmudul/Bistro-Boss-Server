@@ -31,6 +31,22 @@ async function run() {
         const menuCollection = client.db('BistroBossDB').collection('menu');
         const reviewsCollection = client.db('BistroBossDB').collection('reviews');
         const cartsCollection = client.db('BistroBossDB').collection('carts');
+        const usersCollection = client.db('BistroBossDB').collection('users')
+
+        //post users Data on DB
+        app.post('/users', async (req, res) => {
+            const users = req.body;
+            const email = req.body.email;
+            const userEmail = {email : email};
+            const existUser = await usersCollection.findOne(userEmail);
+            if(existUser){
+                return res.send({message : 'user all ready save in database'})
+            }
+            else{
+                const result = await usersCollection.insertOne(users);
+                res.send(result);
+            }
+        })
 
         //get all menu Data from DB
         app.get('/menu', async (req, res) => {
