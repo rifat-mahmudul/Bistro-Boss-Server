@@ -62,6 +62,23 @@ async function run() {
             res.send(result);
         })
 
+        //update user Data from DB
+        app.patch('/user/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const { role } = req.body; 
+            const query = {_id : new ObjectId(id)};
+            if (!role || (role !== "admin" && role !== "user")) {
+                return res.status(400).send({ message: "Invalid role. Role must be either 'admin' or 'user'." });
+            }
+            const updatedDoc = {
+                $set : {
+                    role : role
+                }
+            }
+            const result = await usersCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
         //get all menu Data from DB
         app.get('/menu', async (req, res) => {
             const result = await menuCollection.find().toArray();
