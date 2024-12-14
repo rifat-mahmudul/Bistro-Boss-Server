@@ -33,7 +33,7 @@ async function run() {
         const cartsCollection = client.db('BistroBossDB').collection('carts');
         const usersCollection = client.db('BistroBossDB').collection('users')
 
-        //post users Data on DB
+        //post user Data on DB
         app.post('/users', async (req, res) => {
             const users = req.body;
             const email = req.body.email;
@@ -52,6 +52,14 @@ async function run() {
         app.get('/users', async (req, res) => {
             const result = await usersCollection.find().toArray();
             res.send(result)
+        })
+
+        //Delete user Data from DB
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id : new ObjectId(id)};
+            const result = await usersCollection.deleteOne(query);
+            res.send(result);
         })
 
         //get all menu Data from DB
