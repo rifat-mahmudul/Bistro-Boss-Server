@@ -48,6 +48,12 @@ async function run() {
             }
         })
 
+        //get users Data from DB
+        app.get('/users', async (req, res) => {
+            const result = await usersCollection.find().toArray();
+            res.send(result)
+        })
+
         //get all menu Data from DB
         app.get('/menu', async (req, res) => {
             const result = await menuCollection.find().toArray();
